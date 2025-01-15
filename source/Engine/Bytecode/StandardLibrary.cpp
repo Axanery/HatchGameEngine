@@ -6498,6 +6498,23 @@ VMValue Input_IsAnyActionPressed(int argCount, VMValue* args, Uint32 threadID) {
         return INTEGER_VAL(!!InputManager::IsAnyActionPressed(playerID));
 }
 /***
+ * Input.IsActionPressedByAny
+ * \desc Gets whether any input action is currently pressed
+ * \param actionName (String): Name of the action to check.
+ * \return Returns a Boolean value.
+ * \ns Input
+ */
+VMValue Input_IsActionPressedByAny(int argCount, VMValue* args, Uint32 threadID) {
+    CHECK_AT_LEAST_ARGCOUNT(1);
+    char* actionName = GET_ARG(0, GetString);
+    int actionID = InputManager::GetActionID(actionName);
+    if (actionID == -1) {
+        THROW_ERROR("Invalid input action \"%s\"!", actionName);
+        return NULL_VAL;
+    }
+    return INTEGER_VAL(!!InputManager::IsActionPressedByAny(actionID));
+}
+/***
  * Input.IsAnyActionReleased
  * \desc Gets whether any input action was released for the specified player.
  * \param playerID (Integer): Index of the player to check.
@@ -17860,6 +17877,7 @@ void StandardLibrary::Link() {
     DEF_NATIVE(Input, ActionExists);
     DEF_NATIVE(Input, IsActionHeld);
     DEF_NATIVE(Input, IsActionPressed);
+    DEF_NATIVE(Input, IsActionPressedByAny);
     DEF_NATIVE(Input, IsActionReleased);
     DEF_NATIVE(Input, IsAnyActionHeld);
     DEF_NATIVE(Input, IsAnyActionPressed);
